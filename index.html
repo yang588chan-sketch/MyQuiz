@@ -11,19 +11,27 @@
             --correct: #27ae60;
             --wrong: #e74c3c;
             --bg: #f4f7f6;
+            --warning: #f39c12;
+            --muted: #95a5a6;
         }
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--bg); margin: 0; padding: 20px; }
         .container { max-width: 850px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
-        #timer { font-size: 20px; font-weight: bold; color: var(--wrong); background: #fff5f5; padding: 5px 15px; border-radius: 20px; border: 1px solid #ffc1c1; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px; gap: 12px; }
+        .header-left h2 { margin:0; }
+        .site-title { cursor: pointer; user-select: none; }
+        .site-title:hover { color: var(--accent); }
+        .login-status { color: #7f8c8d; font-size: 13px; margin-top: 6px; }
+        #timer { font-size: 20px; font-weight: bold; color: var(--wrong); background: #fff5f5; padding: 5px 15px; border-radius: 20px; border: 1px solid #ffc1c1; white-space: nowrap; }
         
         .filter-section { text-align: center; margin-bottom: 30px; padding: 20px; background: #f9f9f9; border-radius: 10px; }
-        select, button { padding: 12px 20px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; outline: none; margin: 5px; }
+        select, button, input { padding: 12px 20px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; outline: none; margin: 5px; box-sizing: border-box; }
+        input { background: white; }
         button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
         button:hover { background: #2980b9; }
+        button:disabled { background: #bdc3c7; cursor: not-allowed; }
 
-        #quiz-view, #review-view, #result-view { display: none; }
+        #login-view, #setup-view, #quiz-view, #review-view, #result-view, #wrong-db-view, #favorite-db-view { display: none; }
         .question-box { min-height: 250px; padding: 15px; }
         .question-text { font-size: 19px; font-weight: bold; line-height: 1.6; margin-bottom: 15px; }
         .meta-info { color: #aaa; font-size: 14px; margin-left: 8px; font-weight: normal; }
@@ -35,41 +43,117 @@
         .options-container { display: grid; gap: 10px; }
         .option-item { display: flex; align-items: center; padding: 15px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; transition: 0.2s; }
         .option-item.locked { cursor: default; }
+        .option-item.selected-only { background: #eef6ff; border-color: var(--accent); }
         
         .option-item.correct-flash { background: #d4edda; border-color: var(--correct); color: #155724; }
         .option-item.wrong-flash { background: #f8d7da; border-color: var(--wrong); color: #721c24; }
         .feedback-label { font-weight: bold; margin-left: auto; }
 
-        .nav-controls { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-        .btn-nav { background: #95a5a6; }
+        .nav-controls { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; gap: 10px; }
+        .btn-nav { background: var(--muted); }
 
         .score-circle { width: 120px; height: 120px; line-height: 120px; border-radius: 50%; background: var(--accent); color: white; font-size: 35px; margin: 20px auto; font-weight: bold; text-align: center; }
         .wrong-item { border-left: 5px solid var(--wrong); background: #fffafa; margin-bottom: 20px; padding: 15px; border-radius: 0 8px 8px 0; }
+        .favorite-item { border-left: 5px solid var(--warning); background: #fffdf5; margin-bottom: 20px; padding: 15px; border-radius: 0 8px 8px 0; }
+        .mini-btn { padding: 8px 12px; font-size: 13px; border-radius: 6px; }
+        .gray-btn { background: #7f8c8d; }
+        .green-btn { background: var(--correct); }
+        .red-btn { background: var(--wrong); }
+        .orange-btn { background: var(--warning); }
+        .toolbar { display:flex; justify-content: space-between; align-items:center; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+        .mode-badge { display:inline-block; padding: 5px 10px; border-radius: 20px; background: #eef6ff; color: var(--primary); font-size: 13px; font-weight: bold; }
+        .utility-row { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:15px; }
+        .notice { background: #fff8e1; color: #8a6d00; border: 1px solid #ffe0a3; border-radius: 8px; padding: 10px 12px; font-size: 14px; line-height: 1.5; text-align:left; margin: 10px auto; max-width: 680px; }
+        .danger-note { background: #fff5f5; color: #922b21; border: 1px solid #ffc1c1; border-radius: 8px; padding: 10px 12px; font-size: 14px; line-height: 1.5; text-align:left; margin: 10px auto; max-width: 680px; }
+        .login-card { max-width: 520px; margin: 0 auto; text-align: center; }
+        .full-width { width: 100%; }
+        .question-nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 8px; margin: 15px 0 20px; padding: 12px; background: #f9f9f9; border-radius: 10px; border: 1px solid #eee; }
+        .question-nav-btn { padding: 8px 0; margin: 0; font-size: 13px; border-radius: 6px; background: #bdc3c7; color: white; }
+        .question-nav-btn.answered { background: var(--accent); }
+        .question-nav-btn.current { outline: 3px solid var(--primary); }
+        .question-nav-btn.unanswered { background: #bdc3c7; }
+        .question-nav-btn:hover { filter: brightness(0.95); }
+        .multi-select { position: relative; display: inline-block; min-width: 180px; vertical-align: middle; }
+        .multi-select-btn { width: 100%; background: white; color: #333; border: 1px solid #ddd; text-align: left; font-weight: normal; display: flex; justify-content: space-between; align-items: center; }
+        .multi-select-btn:hover { background: #f7f7f7; }
+        .multi-select-menu { display: none; position: absolute; z-index: 20; left: 5px; right: 5px; top: calc(100% + 4px); background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 8px 18px rgba(0,0,0,0.12); max-height: 240px; overflow-y: auto; padding: 8px; text-align: left; }
+        .multi-select.open .multi-select-menu { display: block; }
+        .multi-option { display: flex; align-items: center; gap: 8px; padding: 9px 8px; border-radius: 6px; cursor: pointer; font-size: 15px; }
+        .multi-option:hover { background: #f4f7f6; }
+        .multi-option input { width: auto; margin: 0; padding: 0; }
+        .multi-clear { width: calc(100% - 10px); margin: 6px 5px 8px; padding: 8px 10px; font-size: 13px; background: #7f8c8d; }
+        @media (max-width: 600px) {
+            .multi-select { width: 100%; }
+            .multi-select-menu { left: 0; right: 0; position: static; margin-top: -2px; box-shadow: none; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container { padding: 18px; }
+            .header { align-items: flex-start; flex-direction: column; }
+            .nav-controls { flex-direction: column; }
+            button, select, input { width: 100%; margin-left: 0; margin-right: 0; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h2 style="margin:0">🚢 航海人員測驗系統</h2>
-        <div id="timer" style="display:none">剩餘時間 60:00</div>
+        <div class="header-left">
+            <h2 class="site-title" onclick="abortQuizToHome()">🚢 航海人員測驗系統</h2>
+            <div id="login-status" class="login-status"></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <div id="timer" style="display:none">剩餘時間 60:00</div>
+            <button id="logout-btn" class="mini-btn gray-btn" style="display:none" onclick="logout()">登出</button>
+        </div>
+    </div>
+
+    <div id="login-view" class="filter-section login-card">
+        <h3>信箱登入</h3>
+        <p style="color:#7f8c8d; font-size:14px; line-height:1.6;">請輸入信箱後進入題庫。此版本為前端單檔示範版，正式上線建議改用 Firebase / Supabase 才能做到跨裝置的真實登入與禁止同時登入。</p>
+        <input id="email-input" type="email" class="full-width" placeholder="請輸入 Email，例如 test@example.com">
+        <button class="full-width" onclick="login()">登入</button>
+        <div id="login-error" class="danger-note" style="display:none"></div>
     </div>
 
     <div id="setup-view" class="filter-section">
         <div style="margin-bottom: 15px;">
             <select id="subject-filter"><option value="">-- 選擇科目 --</option></select>
+            <div class="multi-select" id="year-multi-select">
+                <button type="button" id="year-dropdown-btn" class="multi-select-btn" onclick="toggleYearDropdown()">全部年份 ▾</button>
+                <div id="year-dropdown-menu" class="multi-select-menu"></div>
+            </div>
             <select id="count-filter">
                 <option value="40">40 題</option>
                 <option value="60">60 題</option>
                 <option value="80">80 題</option>
                 <option value="100">100 題</option>
             </select>
+            <select id="mode-filter">
+                <option value="practice">練習模式：即時顯示答案</option>
+                <option value="exam">模擬考模式：最後才看答案</option>
+            </select>
         </div>
         <p style="color:#7f8c8d; font-size:14px;">系統將隨機抽題，並優先出現上次未練習過的題目</p>
-        <button onclick="initQuiz()">開始隨機測驗</button>
+        <button onclick="initQuiz('normal')">開始隨機測驗</button>
+        <div class="utility-row">
+            <button class="orange-btn" onclick="initQuiz('wrong')">錯題資料庫練習</button>
+            <button class="orange-btn" onclick="initQuiz('favorite')">收藏題練習</button>
+            <button class="orange-btn" onclick="showWrongDatabase()">查看錯題資料庫</button>
+            <button class="orange-btn" onclick="showFavoriteDatabase()">查看收藏資料庫</button>
+        </div>
+        <div class="notice">
+            目前錯題與收藏會依照登入信箱儲存在本機瀏覽器 localStorage。換裝置、清除瀏覽器資料後會消失；正式版需改接後端資料庫。
+        </div>
     </div>
 
     <div id="quiz-view">
+        <div class="toolbar">
+            <span id="mode-badge" class="mode-badge"></span>
+            <button id="favorite-btn" class="mini-btn orange-btn" onclick="toggleFavoriteCurrentQuestion()">☆ 收藏本題</button>
+        </div>
+        <div id="question-nav-grid" class="question-nav-grid"></div>
         <div class="question-box">
             <div id="q-image-area"></div>
             <div id="q-content" class="question-text"></div>
@@ -88,16 +172,34 @@
         <h2>測驗結算</h2>
         <div class="score-circle" id="final-score">0</div>
         <p id="score-detail" style="text-align:center; font-size:18px;"></p>
-        <div style="display:flex; gap:10px; justify-content: center; margin-top:20px;">
-            <button onclick="showWrongAnswers()" id="view-wrong-btn">檢視錯題</button>
-            <button style="background:#7f8c8d" onclick="location.reload()">返回首頁</button>
+        <div style="display:flex; gap:10px; justify-content: center; margin-top:20px; flex-wrap:wrap;">
+            <button onclick="showWrongAnswers()" id="view-wrong-btn">檢視本次錯題</button>
+            <button class="orange-btn" onclick="showWrongDatabase()">查看錯題資料庫</button>
+            <button class="orange-btn" onclick="showFavoriteDatabase()">查看收藏資料庫</button>
+            <button class="gray-btn" onclick="backToSetup()">返回首頁</button>
         </div>
     </div>
 
     <div id="review-view">
-        <h3 style="color:var(--wrong)">❌ 錯誤題目回顧</h3>
+        <h3 style="color:var(--wrong)">❌ 本次錯誤題目回顧</h3>
         <div id="wrong-list"></div>
-        <button style="width:100%; margin-top:20px;" onclick="location.reload()">完成回顧</button>
+        <button style="width:100%; margin-top:20px;" onclick="backToSetup()">完成回顧</button>
+    </div>
+
+    <div id="wrong-db-view">
+        <div class="toolbar">
+            <h3 style="color:var(--wrong); margin:0;">❌ 錯題資料庫</h3>
+            <button class="gray-btn mini-btn" onclick="backToSetup()">返回首頁</button>
+        </div>
+        <div id="wrong-db-list"></div>
+    </div>
+
+    <div id="favorite-db-view">
+        <div class="toolbar">
+            <h3 style="color:var(--warning); margin:0;">⭐ 收藏資料庫</h3>
+            <button class="gray-btn mini-btn" onclick="backToSetup()">返回首頁</button>
+        </div>
+        <div id="favorite-db-list"></div>
     </div>
 </div>
 
@@ -109,17 +211,169 @@
     let timerInterval;
     let secondsLeft = 3600;
     let targetCount = 40;
+    let currentMode = 'practice';
+    let currentQuizSource = 'normal';
+    let currentSubject = '';
+    let quizStarted = false;
+    let sessionSnapshot = null;
+    let currentUserEmail = '';
+    let currentSessionId = '';
+    const LOGIN_KEY = 'quiz_current_login';
+    const SESSION_PREFIX = 'quiz_active_session_';
+    const bc = ('BroadcastChannel' in window) ? new BroadcastChannel('quiz_login_channel') : null;
 
-    // 載入 JSON
+    // ========= 登入與單一登入控制 =========
+    function normalizeEmail(email) {
+        return String(email || '').trim().toLowerCase();
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function getUserPrefix() {
+        return `quiz_${currentUserEmail}_`;
+    }
+
+    function login() {
+        const email = normalizeEmail(document.getElementById('email-input').value);
+        const errorBox = document.getElementById('login-error');
+        errorBox.style.display = 'none';
+
+        if (!isValidEmail(email)) {
+            errorBox.innerText = '請輸入正確的 Email 格式。';
+            errorBox.style.display = 'block';
+            return;
+        }
+
+        const activeSession = localStorage.getItem(SESSION_PREFIX + email);
+        if (activeSession) {
+            errorBox.innerText = '此信箱目前已有登入中的工作階段。若你確定沒有其他分頁正在使用，請先清除瀏覽器 localStorage，或在原分頁登出。正式版建議使用後端控管單一登入。';
+            errorBox.style.display = 'block';
+            return;
+        }
+
+        currentUserEmail = email;
+        currentSessionId = `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        localStorage.setItem(LOGIN_KEY, JSON.stringify({ email, sessionId: currentSessionId }));
+        localStorage.setItem(SESSION_PREFIX + email, currentSessionId);
+        if (bc) bc.postMessage({ type: 'login', email, sessionId: currentSessionId });
+        showAppAfterLogin();
+    }
+
+    function restoreLogin() {
+        const saved = JSON.parse(localStorage.getItem(LOGIN_KEY) || 'null');
+        if (!saved || !saved.email || !saved.sessionId) {
+            showOnly('login-view');
+            return;
+        }
+        const activeSession = localStorage.getItem(SESSION_PREFIX + saved.email);
+        if (activeSession && activeSession === saved.sessionId) {
+            currentUserEmail = saved.email;
+            currentSessionId = saved.sessionId;
+            showAppAfterLogin();
+        } else {
+            localStorage.removeItem(LOGIN_KEY);
+            showOnly('login-view');
+        }
+    }
+
+    function logout() {
+        if (currentUserEmail && currentSessionId) {
+            const activeSession = localStorage.getItem(SESSION_PREFIX + currentUserEmail);
+            if (activeSession === currentSessionId) localStorage.removeItem(SESSION_PREFIX + currentUserEmail);
+            if (bc) bc.postMessage({ type: 'logout', email: currentUserEmail, sessionId: currentSessionId });
+        }
+        localStorage.removeItem(LOGIN_KEY);
+        currentUserEmail = '';
+        currentSessionId = '';
+        clearInterval(timerInterval);
+        document.getElementById('timer').style.display = 'none';
+        document.getElementById('logout-btn').style.display = 'none';
+        document.getElementById('login-status').innerText = '';
+        showOnly('login-view');
+    }
+
+    window.addEventListener('beforeunload', () => {
+        // 注意：這只對正常關閉分頁有效；瀏覽器崩潰或強制關閉時可能不會執行。
+        if (currentUserEmail && currentSessionId) {
+            const activeSession = localStorage.getItem(SESSION_PREFIX + currentUserEmail);
+            if (activeSession === currentSessionId) localStorage.removeItem(SESSION_PREFIX + currentUserEmail);
+        }
+    });
+
+    if (bc) {
+        bc.onmessage = (event) => {
+            const msg = event.data || {};
+            if (msg.type === 'login' && msg.email === currentUserEmail && msg.sessionId !== currentSessionId) {
+                alert('此帳號已在其他分頁登入，本分頁將登出。');
+                localStorage.removeItem(LOGIN_KEY);
+                currentUserEmail = '';
+                currentSessionId = '';
+                showOnly('login-view');
+            }
+        };
+    }
+
+    function showAppAfterLogin() {
+        document.getElementById('logout-btn').style.display = 'inline-block';
+        document.getElementById('login-status').innerText = `目前登入：${currentUserEmail}`;
+        showOnly('setup-view');
+    }
+
+    // ========= 資料庫 key =========
+    function wrongDbKey() {
+        return getUserPrefix() + 'wrong_db';
+    }
+
+    function favoriteDbKey() {
+        return getUserPrefix() + 'favorite_db';
+    }
+
+    function seenKey(subject) {
+        return getUserPrefix() + `seen_${subject}`;
+    }
+
+    function loadArray(key) {
+        return JSON.parse(localStorage.getItem(key) || '[]');
+    }
+
+    function saveArray(key, arr) {
+        localStorage.setItem(key, JSON.stringify([...new Set(arr)]));
+    }
+
+    function getQuestionId(q) {
+        // 若未來 JSON 有 id，優先使用 id；否則沿用 groupId + 題目文字，避免同題組多題時互相覆蓋。
+        return q.id || `${q.groupId}_${q.question}`;
+    }
+
+    function getQuestionById(id) {
+        return allData.find(q => getQuestionId(q) === id);
+    }
+
+    // ========= 載入 JSON =========
     fetch('questions.json')
         .then(res => res.json())
         .then(data => {
             allData = data;
             const subjects = [...new Set(data.map(d => d.subject))].sort();
+            const years = [...new Set(data.map(d => d.year))].sort();
             const sSelect = document.getElementById('subject-filter');
+            const ySelect = document.getElementById('year-filter');
             subjects.forEach(s => sSelect.add(new Option(s, s)));
+            renderYearCheckboxes(years);
+            restoreLogin();
         })
-        .catch(err => alert("無法載入題庫，請確認 questions.json 是否正確產出"));
+        .catch(err => {
+            alert('無法載入題庫，請確認 questions.json 是否正確產出');
+            showOnly('login-view');
+        });
+
+    function showOnly(viewId) {
+        ['login-view', 'setup-view', 'quiz-view', 'review-view', 'result-view', 'wrong-db-view', 'favorite-db-view'].forEach(id => {
+            document.getElementById(id).style.display = (id === viewId) ? 'block' : 'none';
+        });
+    }
 
     // 標準洗牌演算法
     function shuffle(array) {
@@ -130,17 +384,82 @@
         return array;
     }
 
-    function initQuiz() {
+    function renderYearCheckboxes(years) {
+        const menu = document.getElementById('year-dropdown-menu');
+        menu.innerHTML = '<button type="button" class="multi-clear" onclick="clearYearSelection()">清除年份，使用全部年份</button>';
+        years.forEach(year => {
+            const label = document.createElement('label');
+            label.className = 'multi-option';
+            label.innerHTML = `<input type="checkbox" class="year-checkbox" value="${year}" onchange="updateYearDropdownLabel()"> <span>${year}</span>`;
+            menu.appendChild(label);
+        });
+        updateYearDropdownLabel();
+    }
+
+    function toggleYearDropdown() {
+        document.getElementById('year-multi-select').classList.toggle('open');
+    }
+
+    function getSelectedYears() {
+        return Array.from(document.querySelectorAll('.year-checkbox:checked')).map(input => input.value);
+    }
+
+    function updateYearDropdownLabel() {
+        const selectedYears = getSelectedYears();
+        const btn = document.getElementById('year-dropdown-btn');
+        if (selectedYears.length === 0) {
+            btn.innerText = '全部年份 ▾';
+        } else if (selectedYears.length <= 2) {
+            btn.innerText = `${selectedYears.join('、')} ▾`;
+        } else {
+            btn.innerText = `已選 ${selectedYears.length} 個年份 ▾`;
+        }
+    }
+
+    function clearYearSelection() {
+        document.querySelectorAll('.year-checkbox').forEach(input => input.checked = false);
+        updateYearDropdownLabel();
+    }
+
+    document.addEventListener('click', (event) => {
+        const box = document.getElementById('year-multi-select');
+        if (box && !box.contains(event.target)) box.classList.remove('open');
+    });
+
+    function matchesSelectedYears(q, selectedYears) {
+        return selectedYears.length === 0 || selectedYears.includes(q.year);
+    }
+
+    function getYearKeySuffix(selectedYears) {
+        return selectedYears.length ? selectedYears.sort().join('-') : '全部年份';
+    }
+
+    function initQuiz(sourceType = 'normal') {
+        if (!currentUserEmail) return showOnly('login-view');
+
         const subject = document.getElementById('subject-filter').value;
+        const selectedYears = getSelectedYears();
         targetCount = parseInt(document.getElementById('count-filter').value);
-        if (!subject) return alert("請選擇科目");
-        
-        let filtered = allData.filter(d => d.subject === subject);
-        if (filtered.length < targetCount) {
-            return alert(`該科目目前只有 ${filtered.length} 題，不足以抽取 ${targetCount} 題。`);
+        currentMode = document.getElementById('mode-filter').value;
+        currentQuizSource = sourceType;
+        currentSubject = subject;
+
+        if (sourceType === 'wrong') {
+            initWrongQuiz();
+            return;
         }
 
-        // 1. 根據新的 groupId 進行分組
+        if (sourceType === 'favorite') {
+            initFavoriteQuiz();
+            return;
+        }
+
+        if (!subject) return alert('請選擇科目');
+        let filtered = allData.filter(d => d.subject === subject && matchesSelectedYears(d, selectedYears));
+        if (filtered.length < targetCount) {
+            return alert(`目前篩選條件下只有 ${filtered.length} 題，不足以抽取 ${targetCount} 題。`);
+        }
+
         const groupsMap = {};
         filtered.forEach(q => {
             if (!groupsMap[q.groupId]) groupsMap[q.groupId] = [];
@@ -148,36 +467,84 @@
         });
         let allGroupIds = Object.keys(groupsMap);
 
-        // 2. 記憶機制：讀取此科目的歷史紀錄
-        const historyKey = `seen_${subject}`;
-        let seenIds = JSON.parse(localStorage.getItem(historyKey) || "[]");
+        const historyKey = seenKey(subject + '_' + getYearKeySuffix(selectedYears));
+        let seenIds = loadArray(historyKey);
+        prepareSessionSnapshot(historyKey, seenIds);
 
-        // 將群組拆分為「未看過」與「看過」
         let freshIds = allGroupIds.filter(id => !seenIds.includes(id));
         let usedIds = allGroupIds.filter(id => seenIds.includes(id));
 
-        // 分別徹底打亂
         shuffle(freshIds);
         shuffle(usedIds);
 
-        // 3. 填滿考卷 (優先用新題)
         let finalIds = [...freshIds, ...usedIds];
         examPool = [];
         for (let id of finalIds) {
             let group = groupsMap[id];
-            // 避免題組被截斷，如果加入這組會爆題數就不加了（除非考卷目前還是空的）
             if (examPool.length + group.length <= targetCount) {
                 examPool.push(...group);
             }
             if (examPool.length >= targetCount) break;
         }
 
-        // 再次全卷隨機洗牌一次 (打破「新題全在前面」的規律，但保留題組內部的連續性)
-        // 注意：為了保留題組連續，我們實際上應該洗的是被抽中的「群組 ID 序列」
+        examPool = shuffleGroupedExamPool(examPool);
+
+        let newSeenIds = [...new Set([...seenIds, ...examPool.map(q => q.groupId)])];
+        if (newSeenIds.length >= allGroupIds.length) newSeenIds = examPool.map(q => q.groupId);
+        saveArray(historyKey, newSeenIds);
+
+        startQuizState();
+    }
+
+    function initWrongQuiz() {
+        const wrongIds = loadArray(wrongDbKey());
+        if (wrongIds.length === 0) return alert('目前沒有錯題資料。');
+
+        const subject = document.getElementById('subject-filter').value;
+        const selectedYears = getSelectedYears();
+        let wrongQuestions = wrongIds.map(id => getQuestionById(id)).filter(Boolean);
+        if (subject) wrongQuestions = wrongQuestions.filter(q => q.subject === subject);
+        wrongQuestions = wrongQuestions.filter(q => matchesSelectedYears(q, selectedYears));
+
+        if (wrongQuestions.length === 0) return alert('錯題資料庫在目前篩選條件下沒有題目。');
+
+        prepareSessionSnapshot(null, null);
+        targetCount = parseInt(document.getElementById('count-filter').value);
+        examPool = shuffle(wrongQuestions).slice(0, Math.min(targetCount, wrongQuestions.length));
+        startQuizState();
+    }
+
+    function initFavoriteQuiz() {
+        const favoriteIds = loadArray(favoriteDbKey());
+        if (favoriteIds.length === 0) return alert('目前沒有收藏題目。');
+
+        const subject = document.getElementById('subject-filter').value;
+        const selectedYears = getSelectedYears();
+        let favoriteQuestions = favoriteIds.map(id => getQuestionById(id)).filter(Boolean);
+        if (subject) favoriteQuestions = favoriteQuestions.filter(q => q.subject === subject);
+        favoriteQuestions = favoriteQuestions.filter(q => matchesSelectedYears(q, selectedYears));
+
+        if (favoriteQuestions.length === 0) return alert('收藏資料庫在目前篩選條件下沒有題目。');
+
+        prepareSessionSnapshot(null, null);
+        targetCount = parseInt(document.getElementById('count-filter').value);
+        examPool = shuffle(favoriteQuestions).slice(0, Math.min(targetCount, favoriteQuestions.length));
+        startQuizState();
+    }
+
+    function prepareSessionSnapshot(historyKey, seenIds) {
+        sessionSnapshot = {
+            wrongDb: loadArray(wrongDbKey()),
+            historyKey: historyKey,
+            seenIds: Array.isArray(seenIds) ? [...seenIds] : null
+        };
+    }
+
+    function shuffleGroupedExamPool(pool) {
         let selectedGroups = [];
-        let tempCurrentGroupId = "";
+        let tempCurrentGroupId = '';
         let currentGroupObj = [];
-        examPool.forEach(q => {
+        pool.forEach(q => {
             if (q.groupId !== tempCurrentGroupId) {
                 if (currentGroupObj.length > 0) selectedGroups.push(currentGroupObj);
                 currentGroupObj = [q];
@@ -187,27 +554,42 @@
             }
         });
         if (currentGroupObj.length > 0) selectedGroups.push(currentGroupObj);
-        
-        shuffle(selectedGroups); // 洗群組順序
-        examPool = selectedGroups.flat(); // 攤平回題目列表
+        shuffle(selectedGroups);
+        return selectedGroups.flat();
+    }
 
-        // 4. 更新紀錄 (把這次考的存入看過的 ID 裡)
-        let newSeenIds = [...new Set([...seenIds, ...examPool.map(q => q.groupId)])];
-        // 如果全部題庫都看過了，就清空重來
-        if (newSeenIds.length >= allGroupIds.length) newSeenIds = examPool.map(q => q.groupId);
-        localStorage.setItem(historyKey, JSON.stringify(newSeenIds));
-
-        // 重設狀態
+    function startQuizState() {
+        quizStarted = true;
         currentIndex = 0;
         userAnswers = {};
-        document.getElementById('setup-view').style.display = 'none';
-        document.getElementById('quiz-view').style.display = 'block';
+        showOnly('quiz-view');
         document.getElementById('timer').style.display = 'block';
+        document.getElementById('mode-badge').innerText = currentMode === 'practice' ? '練習模式：答完立即顯示正解' : '模擬考模式：最後才顯示成績';
         startTimer();
         renderQuestion();
     }
 
+    function renderQuestionNav() {
+        const nav = document.getElementById('question-nav-grid');
+        if (!nav) return;
+        nav.innerHTML = '';
+        examPool.forEach((q, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'question-nav-btn';
+            btn.innerText = idx + 1;
+            btn.classList.add(userAnswers[idx] ? 'answered' : 'unanswered');
+            if (idx === currentIndex) btn.classList.add('current');
+            btn.onclick = () => {
+                currentIndex = idx;
+                renderQuestion();
+                window.scrollTo(0, 0);
+            };
+            nav.appendChild(btn);
+        });
+    }
+
     function startTimer() {
+        clearInterval(timerInterval);
         secondsLeft = 3600;
         timerInterval = setInterval(() => {
             secondsLeft--;
@@ -223,23 +605,27 @@
         const qContent = document.getElementById('q-content');
         const optionsList = document.getElementById('options-list');
         const imageArea = document.getElementById('q-image-area');
+        const favoriteBtn = document.getElementById('favorite-btn');
 
-        // 圖片顯示邏輯 (直接信任 JSON 中的路徑)
-        if (q.image && q.image.trim() !== "") {
+        if (!q) return;
+
+        const qid = getQuestionId(q);
+        const favoriteIds = loadArray(favoriteDbKey());
+        favoriteBtn.innerText = favoriteIds.includes(qid) ? '★ 已收藏本題' : '☆ 收藏本題';
+
+        if (q.image && q.image.trim() !== '') {
             imageArea.innerHTML = `<div class="q-image-container"><img src="${q.image}" alt="題目圖片" onerror="this.parentElement.innerHTML='<div class=image-missing-note>⚠️ 找不到圖檔：${q.image}</div>'"></div>`;
         } else {
-            // 檢查題目文字是否暗示有圖但 JSON 沒抓到
-            const mentionsImg = ["如圖", "下圖", "附圖", "如下圖"].some(kw => q.question.includes(kw));
+            const mentionsImg = ['如圖', '下圖', '附圖', '如下圖'].some(kw => q.question.includes(kw));
             if (mentionsImg) {
                 imageArea.innerHTML = `<div class="image-missing-note">⚠️ 偵測到關鍵字，但 JSON 資料中無對應圖片路徑 (${q.groupId})</div>`;
             } else {
-                imageArea.innerHTML = "";
+                imageArea.innerHTML = '';
             }
         }
 
-        // 移除題目的前綴題號 (1. 2.) 讓介面更乾淨
         const cleanText = q.question.replace(/^\d+\.\s*/, '');
-        qContent.innerHTML = `${cleanText} <span class="meta-info">(${q.year} 題號:${q.groupId.split('_').pop()})</span>`;
+        qContent.innerHTML = `${cleanText} <span class="meta-info">(${q.year} 題號:${q.groupId ? q.groupId.split('_').pop() : '-'})</span>`;
         
         optionsList.innerHTML = '';
         const answered = userAnswers[currentIndex];
@@ -247,34 +633,83 @@
         ['A', 'B', 'C', 'D'].forEach(letter => {
             const item = document.createElement('div');
             item.className = 'option-item';
-            
-            if (answered) {
+            const optionText = q.options && q.options[letter] ? q.options[letter] : '';
+
+            // 練習模式：答完後鎖定，立即顯示正解
+            if (answered && currentMode === 'practice') {
                 item.classList.add('locked');
                 if (letter === q.answer) {
                     item.classList.add('correct-flash');
-                    item.innerHTML = `<strong>${letter}.</strong> &nbsp; ${q.options[letter]} <span class="feedback-label">✓ 正確答案</span>`;
+                    item.innerHTML = `<strong>${letter}.</strong> &nbsp; ${optionText} <span class="feedback-label">✓ 正確答案</span>`;
                 } else if (letter === answered.choice && !answered.isCorrect) {
                     item.classList.add('wrong-flash');
-                    item.innerHTML = `<strong>${letter}.</strong> &nbsp; ${q.options[letter]} <span class="feedback-label">✗ 你的選擇</span>`;
+                    item.innerHTML = `<strong>${letter}.</strong> &nbsp; ${optionText} <span class="feedback-label">✗ 你的選擇</span>`;
                 } else {
-                    item.innerHTML = `<strong>${letter}.</strong> &nbsp; ${q.options[letter]}`;
+                    item.innerHTML = `<strong>${letter}.</strong> &nbsp; ${optionText}`;
                 }
             } else {
+                // 模擬考模式：完成測驗前可自由更改答案，但不顯示正解
+                if (answered && currentMode === 'exam' && letter === answered.choice) {
+                    item.classList.add('selected-only');
+                    item.innerHTML = `<strong>${letter}.</strong> &nbsp; ${optionText} <span class="feedback-label">已選擇</span>`;
+                } else {
+                    item.innerHTML = `<strong>${letter}.</strong> &nbsp; ${optionText}`;
+                }
+
                 item.onclick = () => {
-                    userAnswers[currentIndex] = { choice: letter, isCorrect: (letter === q.answer) };
+                    const isCorrect = (letter === q.answer);
+                    userAnswers[currentIndex] = { choice: letter, isCorrect };
+
+                    // 練習模式答題當下就更新錯題庫；模擬考等 finishQuiz() 統一寫入，避免改答案時錯題庫反覆變動
+                    if (currentMode === 'practice') updateWrongDatabase(q, isCorrect);
                     renderQuestion();
                 };
-                item.innerHTML = `<strong>${letter}.</strong> &nbsp; ${q.options[letter]}`;
             }
+
             optionsList.appendChild(item);
         });
 
+        renderQuestionNav();
         document.getElementById('progress-text').innerText = `${currentIndex + 1} / ${examPool.length}`;
         document.getElementById('prev-btn').disabled = currentIndex === 0;
         
         const isLast = (currentIndex === examPool.length - 1);
         document.getElementById('next-btn').style.display = isLast ? 'none' : 'block';
         document.getElementById('final-submit').style.display = isLast ? 'block' : 'none';
+    }
+
+    function updateExamWrongDatabaseOnFinish() {
+        if (currentMode !== 'exam') return;
+        examPool.forEach((q, idx) => {
+            const ans = userAnswers[idx];
+            updateWrongDatabase(q, !!ans && ans.isCorrect);
+        });
+    }
+
+    function updateWrongDatabase(q, isCorrect) {
+        const qid = getQuestionId(q);
+        let wrongIds = loadArray(wrongDbKey());
+        if (isCorrect) {
+            // 答對後自動移出錯題庫
+            wrongIds = wrongIds.filter(id => id !== qid);
+        } else {
+            wrongIds.push(qid);
+        }
+        saveArray(wrongDbKey(), wrongIds);
+    }
+
+    function toggleFavoriteCurrentQuestion() {
+        const q = examPool[currentIndex];
+        if (!q) return;
+        const qid = getQuestionId(q);
+        let favoriteIds = loadArray(favoriteDbKey());
+        if (favoriteIds.includes(qid)) {
+            favoriteIds = favoriteIds.filter(id => id !== qid);
+        } else {
+            favoriteIds.push(qid);
+        }
+        saveArray(favoriteDbKey(), favoriteIds);
+        renderQuestion();
     }
 
     function changeQuestion(step) {
@@ -284,12 +719,15 @@
     }
 
     function finishQuiz() {
+        quizStarted = false;
+        sessionSnapshot = null;
+        updateExamWrongDatabaseOnFinish();
         clearInterval(timerInterval);
         let correctCount = 0;
         for (let i = 0; i < examPool.length; i++) {
             if (userAnswers[i] && userAnswers[i].isCorrect) correctCount++;
         }
-        const score = (correctCount / examPool.length * 100).toFixed(1);
+        const score = examPool.length ? (correctCount / examPool.length * 100).toFixed(1) : '0.0';
         document.getElementById('quiz-view').style.display = 'none';
         document.getElementById('timer').style.display = 'none';
         document.getElementById('result-view').style.display = 'block';
@@ -306,20 +744,115 @@
         examPool.forEach((q, idx) => {
             const ans = userAnswers[idx];
             if (!ans || !ans.isCorrect) {
-                const item = document.createElement('div');
-                item.className = 'wrong-item';
-                const userChoice = ans ? ans.choice : "未作答";
-                const imgHtml = q.image ? `<br><img src="${q.image}" style="max-width:300px; margin:10px 0;">` : "";
-                
-                item.innerHTML = `
-                    <p><strong>題目：</strong>${q.question} (${q.year})</p>
-                    ${imgHtml}
-                    <p style="color:var(--wrong); margin:5px 0;">❌ 你的答案：${userChoice}</p>
-                    <p style="color:var(--correct); margin:5px 0;">✅ 正確答案：${q.answer}. ${q.options[q.answer]}</p>
-                `;
-                listContainer.appendChild(item);
+                listContainer.appendChild(buildQuestionReviewItem(q, ans, 'wrong-item', true));
             }
         });
+        if (!listContainer.innerHTML) listContainer.innerHTML = '<p style="color:#7f8c8d;">本次沒有錯題。</p>';
+        window.scrollTo(0,0);
+    }
+
+    function buildQuestionReviewItem(q, ans, className, showUserAnswer) {
+        const item = document.createElement('div');
+        item.className = className;
+        const userChoice = ans ? ans.choice : '未作答';
+        const imgHtml = q.image ? `<br><img src="${q.image}" style="max-width:300px; margin:10px 0;">` : '';
+        const qid = getQuestionId(q);
+        item.innerHTML = `
+            <p><strong>題目：</strong>${q.question} (${q.year}｜${q.subject})</p>
+            ${imgHtml}
+            ${showUserAnswer ? `<p style="color:var(--wrong); margin:5px 0;">❌ 你的答案：${userChoice}</p>` : ''}
+            <p style="color:var(--correct); margin:5px 0;">✅ 正確答案：${q.answer}. ${q.options[q.answer]}</p>
+            <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="mini-btn orange-btn" onclick="toggleFavoriteById('${escapeAttr(qid)}')">切換收藏</button>
+                <button class="mini-btn red-btn" onclick="removeWrongById('${escapeAttr(qid)}')">從錯題移除</button>
+            </div>
+        `;
+        return item;
+    }
+
+    function escapeAttr(str) {
+        return String(str).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+    }
+
+    function showWrongDatabase() {
+        clearInterval(timerInterval);
+        document.getElementById('timer').style.display = 'none';
+        showOnly('wrong-db-view');
+        const container = document.getElementById('wrong-db-list');
+        const wrongIds = loadArray(wrongDbKey());
+        const questions = wrongIds.map(id => getQuestionById(id)).filter(Boolean);
+        container.innerHTML = '';
+        if (questions.length === 0) {
+            container.innerHTML = '<p style="color:#7f8c8d;">目前沒有錯題資料。</p>';
+            return;
+        }
+        questions.forEach(q => container.appendChild(buildQuestionReviewItem(q, null, 'wrong-item', false)));
+    }
+
+    function showFavoriteDatabase() {
+        clearInterval(timerInterval);
+        document.getElementById('timer').style.display = 'none';
+        showOnly('favorite-db-view');
+        const container = document.getElementById('favorite-db-list');
+        const favoriteIds = loadArray(favoriteDbKey());
+        const questions = favoriteIds.map(id => getQuestionById(id)).filter(Boolean);
+        container.innerHTML = '';
+        if (questions.length === 0) {
+            container.innerHTML = '<p style="color:#7f8c8d;">目前沒有收藏題目。</p>';
+            return;
+        }
+        questions.forEach(q => {
+            const item = buildQuestionReviewItem(q, null, 'favorite-item', false);
+            container.appendChild(item);
+        });
+    }
+
+    function toggleFavoriteById(qid) {
+        let favoriteIds = loadArray(favoriteDbKey());
+        if (favoriteIds.includes(qid)) {
+            favoriteIds = favoriteIds.filter(id => id !== qid);
+        } else {
+            favoriteIds.push(qid);
+        }
+        saveArray(favoriteDbKey(), favoriteIds);
+        showFavoriteDatabase();
+    }
+
+    function removeWrongById(qid) {
+        let wrongIds = loadArray(wrongDbKey()).filter(id => id !== qid);
+        saveArray(wrongDbKey(), wrongIds);
+        showWrongDatabase();
+    }
+
+    function backToSetup() {
+        clearInterval(timerInterval);
+        document.getElementById('timer').style.display = 'none';
+        quizStarted = false;
+        sessionSnapshot = null;
+        showOnly('setup-view');
+        window.scrollTo(0,0);
+    }
+
+    function abortQuizToHome() {
+        if (!currentUserEmail) return showOnly('login-view');
+
+        if (quizStarted) {
+            const ok = confirm('確定回主頁？本次尚未完成的測驗結果不會紀錄。');
+            if (!ok) return;
+            if (sessionSnapshot) {
+                saveArray(wrongDbKey(), sessionSnapshot.wrongDb || []);
+                if (sessionSnapshot.historyKey) saveArray(sessionSnapshot.historyKey, sessionSnapshot.seenIds || []);
+            }
+        }
+
+        clearInterval(timerInterval);
+        document.getElementById('timer').style.display = 'none';
+        quizStarted = false;
+        sessionSnapshot = null;
+        userAnswers = {};
+        examPool = [];
+        currentIndex = 0;
+        showOnly('setup-view');
         window.scrollTo(0,0);
     }
 </script>
