@@ -16,82 +16,67 @@
         }
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--bg); margin: 0; padding: 20px; }
         .container { max-width: 850px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px; gap: 12px; }
-        .header-left h2 { margin:0; }
-        .site-title { cursor: pointer; user-select: none; }
-        .site-title:hover { color: var(--accent); }
-        .login-status { color: #7f8c8d; font-size: 13px; margin-top: 6px; }
+        .header-left h2 { margin:0; cursor:pointer; user-select:none; }
+        .header-left h2:hover { color: var(--accent); }
+        .login-status { color: #7f8c8d; font-size: 13px; margin-top: 6px; word-break: break-all; }
         #timer { font-size: 20px; font-weight: bold; color: var(--wrong); background: #fff5f5; padding: 5px 15px; border-radius: 20px; border: 1px solid #ffc1c1; white-space: nowrap; }
-        
         .filter-section { text-align: center; margin-bottom: 30px; padding: 20px; background: #f9f9f9; border-radius: 10px; }
         select, button, input { padding: 12px 20px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; outline: none; margin: 5px; box-sizing: border-box; }
         input { background: white; }
         button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
         button:hover { background: #2980b9; }
         button:disabled { background: #bdc3c7; cursor: not-allowed; }
-
-        #login-view, #setup-view, #quiz-view, #review-view, #result-view, #wrong-db-view, #favorite-db-view { display: none; }
+        #loading-view, #login-view, #setup-view, #quiz-view, #result-view, #wrong-db-view, #favorite-db-view { display: none; }
         .question-box { min-height: 250px; padding: 15px; }
-        .question-text { font-size: 19px; font-weight: bold; line-height: 1.6; margin-bottom: 15px; }
+        .question-text { font-size: 19px; font-weight: bold; line-height: 1.6; margin-bottom: 15px; white-space: pre-wrap; }
         .meta-info { color: #aaa; font-size: 14px; margin-left: 8px; font-weight: normal; }
-        
         .q-image-container { margin: 15px 0; text-align: center; background: #fafafa; border: 1px solid #eee; padding: 10px; border-radius: 8px; }
         .q-image-container img { max-width: 100%; max-height: 400px; border: 1px solid #ccc; }
         .image-missing-note { color: #e67e22; background: #fff3e0; padding: 10px 15px; border-radius: 6px; font-size: 14px; margin-bottom: 15px; display: block; border: 1px solid #ffe0b2; text-align: center; }
-
         .options-container { display: grid; gap: 10px; }
-        .option-item { display: flex; align-items: center; padding: 15px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+        .option-item { display: flex; align-items: center; padding: 15px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; transition: 0.2s; white-space: pre-wrap; }
         .option-item.locked { cursor: default; }
         .option-item.selected-only { background: #eef6ff; border-color: var(--accent); }
-        
         .option-item.correct-flash { background: #d4edda; border-color: var(--correct); color: #155724; }
         .option-item.wrong-flash { background: #f8d7da; border-color: var(--wrong); color: #721c24; }
         .feedback-label { font-weight: bold; margin-left: auto; }
-
         .nav-controls { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; gap: 10px; }
         .btn-nav { background: var(--muted); }
-
         .score-circle { width: 120px; height: 120px; line-height: 120px; border-radius: 50%; background: var(--accent); color: white; font-size: 35px; margin: 20px auto; font-weight: bold; text-align: center; }
         .wrong-item { border-left: 5px solid var(--wrong); background: #fffafa; margin-bottom: 20px; padding: 15px; border-radius: 0 8px 8px 0; }
         .favorite-item { border-left: 5px solid var(--warning); background: #fffdf5; margin-bottom: 20px; padding: 15px; border-radius: 0 8px 8px 0; }
         .mini-btn { padding: 8px 12px; font-size: 13px; border-radius: 6px; }
         .gray-btn { background: #7f8c8d; }
+        .orange-btn { background: var(--warning); }
         .green-btn { background: var(--correct); }
         .red-btn { background: var(--wrong); }
-        .orange-btn { background: var(--warning); }
         .toolbar { display:flex; justify-content: space-between; align-items:center; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
         .mode-badge { display:inline-block; padding: 5px 10px; border-radius: 20px; background: #eef6ff; color: var(--primary); font-size: 13px; font-weight: bold; }
         .utility-row { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:15px; }
         .notice { background: #fff8e1; color: #8a6d00; border: 1px solid #ffe0a3; border-radius: 8px; padding: 10px 12px; font-size: 14px; line-height: 1.5; text-align:left; margin: 10px auto; max-width: 680px; }
         .danger-note { background: #fff5f5; color: #922b21; border: 1px solid #ffc1c1; border-radius: 8px; padding: 10px 12px; font-size: 14px; line-height: 1.5; text-align:left; margin: 10px auto; max-width: 680px; }
+        .success-note { background: #ecfff3; color: #1e8449; border: 1px solid #b8e6c7; border-radius: 8px; padding: 10px 12px; font-size: 14px; line-height: 1.5; text-align:left; margin: 10px auto; max-width: 680px; }
         .login-card { max-width: 520px; margin: 0 auto; text-align: center; }
         .full-width { width: 100%; }
-        .question-nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 8px; margin: 15px 0 20px; padding: 12px; background: #f9f9f9; border-radius: 10px; border: 1px solid #eee; }
-        .question-nav-btn { padding: 8px 0; margin: 0; font-size: 13px; border-radius: 6px; background: #bdc3c7; color: white; }
-        .question-nav-btn.answered { background: var(--accent); }
-        .question-nav-btn.current { outline: 3px solid var(--primary); }
-        .question-nav-btn.unanswered { background: #bdc3c7; }
-        .question-nav-btn:hover { filter: brightness(0.95); }
-        .multi-select { position: relative; display: inline-block; min-width: 180px; vertical-align: middle; }
-        .multi-select-btn { width: 100%; background: white; color: #333; border: 1px solid #ddd; text-align: left; font-weight: normal; display: flex; justify-content: space-between; align-items: center; }
-        .multi-select-btn:hover { background: #f7f7f7; }
-        .multi-select-menu { display: none; position: absolute; z-index: 20; left: 5px; right: 5px; top: calc(100% + 4px); background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 8px 18px rgba(0,0,0,0.12); max-height: 240px; overflow-y: auto; padding: 8px; text-align: left; }
-        .multi-select.open .multi-select-menu { display: block; }
-        .multi-option { display: flex; align-items: center; gap: 8px; padding: 9px 8px; border-radius: 6px; cursor: pointer; font-size: 15px; }
-        .multi-option:hover { background: #f4f7f6; }
-        .multi-option input { width: auto; margin: 0; padding: 0; }
-        .multi-clear { width: calc(100% - 10px); margin: 6px 5px 8px; padding: 8px 10px; font-size: 13px; background: #7f8c8d; }
-        @media (max-width: 600px) {
-            .multi-select { width: 100%; }
-            .multi-select-menu { left: 0; right: 0; position: static; margin-top: -2px; box-shadow: none; }
-        }
+        .year-box { max-width: 680px; margin: 10px auto 0; text-align: left; }
+        .year-title { font-weight: bold; color: var(--primary); margin-bottom: 8px; text-align: center; }
+        .year-options { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+        .year-chip { display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border:1px solid #ddd; border-radius:999px; background:#fff; cursor:pointer; font-size:14px; }
+        .year-chip input { width:auto; margin:0; }
+        #question-nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 5px; margin-top: 15px; }
+        .question-nav-btn { padding: 8px 0; border: 1px solid #ddd; border-radius: 5px; background: white; color: var(--primary); cursor: pointer; font-size: 12px; margin:0; }
+        .question-nav-btn.answered { background: #eef6ff; border-color: var(--accent); }
+        .question-nav-btn.current { background: var(--accent); color: white; border-color: var(--accent); }
+        .empty-state { text-align:center; color:#7f8c8d; padding:25px 10px; }
         @media (max-width: 600px) {
             body { padding: 10px; }
             .container { padding: 18px; }
             .header { align-items: flex-start; flex-direction: column; }
             .nav-controls { flex-direction: column; }
             button, select, input { width: 100%; margin-left: 0; margin-right: 0; }
+            .year-chip { width:auto; }
+            .question-nav-btn { width:auto; }
         }
     </style>
 </head>
@@ -100,7 +85,7 @@
 <div class="container">
     <div class="header">
         <div class="header-left">
-            <h2 class="site-title" onclick="abortQuizToHome()">🚢 航海人員測驗系統</h2>
+            <h2 onclick="goHome()">🚢 航海人員測驗系統</h2>
             <div id="login-status" class="login-status"></div>
         </div>
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -109,38 +94,61 @@
         </div>
     </div>
 
+    <div id="loading-view" class="filter-section">
+        <h3>載入中...</h3>
+        <p style="color:#7f8c8d;">正在載入題庫與帳號狀態。</p>
+    </div>
+
     <div id="login-view" class="filter-section login-card">
-        <h3>信箱登入</h3>
-        <p style="color:#7f8c8d; font-size:14px; line-height:1.6;">請輸入信箱後進入題庫。此版本已初步整合 Firebase SDK。</p>
-        <input id="email-input" type="email" class="full-width" placeholder="請輸入 Email，例如 test@example.com">
+        <h3>會員登入 / 註冊</h3>
+        <p style="color:#7f8c8d; font-size:14px; line-height:1.6;">
+            使用 Firebase Authentication 安全登入。不同裝置使用同一組 Email 與密碼登入後，會讀取同一份個人錯題庫與收藏庫。
+        </p>
+        <input id="email-input" type="email" class="full-width" autocomplete="email" placeholder="Email，例如 test@example.com">
+        <input id="password-input" type="password" class="full-width" autocomplete="current-password" placeholder="密碼，至少 6 碼">
         <button class="full-width" onclick="login()">登入</button>
+        <button class="full-width green-btn" onclick="register()">註冊新帳號</button>
+        <button class="full-width gray-btn" onclick="resetPassword()">忘記密碼 / 寄送重設信</button>
         <div id="login-error" class="danger-note" style="display:none"></div>
+        <div id="login-success" class="success-note" style="display:none"></div>
+        <div class="notice">
+            注意：請先到 Firebase Console → Authentication → Sign-in method 啟用 Email/Password。
+        </div>
     </div>
 
     <div id="setup-view" class="filter-section">
         <div style="margin-bottom: 15px;">
             <select id="subject-filter"><option value="">-- 選擇科目 --</option></select>
-            <div class="multi-select" id="year-multi-select">
-                <button type="button" id="year-dropdown-btn" class="multi-select-btn" onclick="toggleYearDropdown()">全部年份 ▾</button>
-                <div id="year-dropdown-menu" class="multi-select-menu"></div>
-            </div>
             <select id="count-filter">
                 <option value="40">40 題</option>
                 <option value="60">60 題</option>
                 <option value="80">80 題</option>
-                <option value="100">100 題</option>
             </select>
             <select id="mode-filter">
-                <option value="practice">練習模式：即時顯示答案</option>
-                <option value="exam">模擬考模式：最後才看答案</option>
+                <option value="practice">練習模式</option>
+                <option value="exam">模擬考模式</option>
             </select>
         </div>
+
+        <div class="year-box">
+            <div class="year-title">年份複選</div>
+            <div style="text-align:center; margin-bottom:8px;">
+                <button class="mini-btn gray-btn" onclick="selectAllYears(true)">全選年份</button>
+                <button class="mini-btn gray-btn" onclick="selectAllYears(false)">清除年份</button>
+            </div>
+            <div id="year-options" class="year-options"></div>
+        </div>
+
+        <div class="notice">
+            年份可複選。若沒有勾選年份，系統會視為使用該科目的全部年份。錯題、收藏與承上題圖片關聯皆以 groupId 為主。
+        </div>
+
         <button onclick="initQuiz('normal')">開始隨機測驗</button>
         <div class="utility-row">
-            <button class="orange-btn" onclick="initQuiz('wrong')">答錯題練習</button>
-            <button class="orange-btn" onclick="initQuiz('favorite')">收藏題練習</button>
-            <button class="orange-btn" onclick="showWrongDatabase()">答錯資料庫</button>
-            <button class="orange-btn" onclick="showFavoriteDatabase()">收藏資料庫</button>
+            <button class="orange-btn" onclick="initQuiz('wrong')">錯題練習</button>
+            <button class="orange-btn" onclick="initQuiz('favorite')">收藏題測驗</button>
+            <button class="orange-btn" onclick="showWrongDatabase()">查看錯題庫</button>
+            <button class="orange-btn" onclick="showFavoriteDatabase()">查看收藏庫</button>
         </div>
     </div>
 
@@ -149,221 +157,744 @@
             <span id="mode-badge" class="mode-badge"></span>
             <button id="favorite-btn" class="mini-btn orange-btn" onclick="toggleFavoriteCurrentQuestion()">☆ 收藏本題</button>
         </div>
-        <div id="question-nav-grid" class="question-nav-grid"></div>
         <div class="question-box">
             <div id="q-image-area"></div>
             <div id="q-content" class="question-text"></div>
             <div id="options-list" class="options-container"></div>
         </div>
+        <div id="question-nav-grid"></div>
         <div class="nav-controls">
             <button class="btn-nav" id="prev-btn" onclick="changeQuestion(-1)">上一題</button>
             <span id="progress-text" style="align-self:center; font-weight:bold; color:#7f8c8d"></span>
-            <button id="next-btn" onclick="changeQuestion(1)">下一題 / 跳過</button>
+            <button id="next-btn" onclick="changeQuestion(1)">下一題</button>
         </div>
-        <button id="final-submit" style="width:100%; margin-top:15px; display:none; background:#27ae60" onclick="finishQuiz()">結束測驗並看評分</button>
+        <button id="final-submit" style="width:100%; margin-top:15px; display:none; background:#27ae60" onclick="finishQuiz()">提交測驗</button>
     </div>
 
-    <div id="result-view">
+    <div id="result-view" style="text-align:center;">
         <h2>測驗結算</h2>
         <div class="score-circle" id="final-score">0</div>
-        <p id="score-detail" style="text-align:center; font-size:18px;"></p>
-        <div style="display:flex; gap:10px; justify-content: center; margin-top:20px; flex-wrap:wrap;">
-            <button onclick="showWrongAnswers()" id="view-wrong-btn">檢視本次錯題</button>
-            <button class="gray-btn" onclick="backToSetup()">返回首頁</button>
-        </div>
+        <p id="score-detail"></p>
+        <button class="gray-btn" onclick="goHome()">返回首頁</button>
+    </div>
+    
+    <div id="wrong-db-view">
+        <div class="toolbar"><h3>❌ 錯題資料庫</h3><button onclick="goHome()">返回首頁</button></div>
+        <div id="wrong-db-list"></div>
     </div>
 
-    <div id="review-view">
-        <h3 style="color:var(--wrong)">❌ 本次錯誤題目回顧</h3>
-        <div id="wrong-list"></div>
-        <button style="width:100%; margin-top:20px;" onclick="backToSetup()">完成回顧</button>
+    <div id="favorite-db-view">
+        <div class="toolbar"><h3>⭐ 收藏資料庫</h3><button onclick="goHome()">返回首頁</button></div>
+        <div id="favorite-db-list"></div>
     </div>
-
-    <div id="wrong-db-view"><div class="toolbar"><h3 style="color:var(--wrong);">❌ 錯題資料庫</h3><button class="gray-btn mini-btn" onclick="backToSetup()">返回</button></div><div id="wrong-db-list"></div></div>
-    <div id="favorite-db-view"><div class="toolbar"><h3 style="color:var(--warning);">⭐ 收藏資料庫</h3><button class="gray-btn mini-btn" onclick="backToSetup()">返回</button></div><div id="favorite-db-list"></div></div>
 </div>
 
-<script>
-    // ========= 全域變數與初始化 =========
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+        getAuth,
+        onAuthStateChanged,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signOut,
+        sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        updateDoc,
+        arrayUnion,
+        arrayRemove,
+        serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBo94FGt2kzQsEpYvnEjkbrmo85fzNO0UQ",
+        authDomain: "myquiz-443fc.firebaseapp.com",
+        projectId: "myquiz-443fc",
+        storageBucket: "myquiz-443fc.firebasestorage.app",
+        messagingSenderId: "821958673153",
+        appId: "1:821958673153:web:fc11869a6b1256036f5100"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
     let allData = [];
-    let examPool = []; 
-    let userAnswers = {}; 
+    let examPool = [];
+    let userAnswers = {};
     let currentIndex = 0;
-    let timerInterval;
-    let secondsLeft = 3600;
-    let targetCount = 40;
+    let currentUser = null;
+    let userData = { wrong_db: [], favorite_db: [] };
     let currentMode = 'practice';
-    let currentUserEmail = '';
-    let currentSessionId = '';
-    const LOGIN_KEY = 'quiz_current_login';
-    const SESSION_PREFIX = 'quiz_active_session_';
+    let currentSource = 'normal';
+    let timerInterval = null;
+    let secondsLeft = 0;
+    let questionsLoaded = false;
 
-    // 核心資料載入
-    fetch('questions.json')
-        .then(res => res.json())
-        .then(data => {
-            allData = data;
-            const subjects = [...new Set(data.map(d => d.subject))].sort();
-            const years = [...new Set(data.map(d => d.year))].sort();
-            const sSelect = document.getElementById('subject-filter');
-            subjects.forEach(s => sSelect.add(new Option(s, s)));
-            renderYearCheckboxes(years);
-            restoreLogin();
-        }).catch(err => alert('無法載入題庫，請確認 questions.json 位置'));
+    const STORAGE_KEY = 'quiz_last_settings_v2';
 
-    // ========= 輔助工具函數 =========
-    function getUserPrefix() { return `quiz_${currentUserEmail}_`; }
-    function wrongDbKey() { return getUserPrefix() + 'wrong_db'; }
-    function favoriteDbKey() { return getUserPrefix() + 'favorite_db'; }
-    function loadArray(key) { return JSON.parse(localStorage.getItem(key) || '[]'); }
-    function saveArray(key, arr) { localStorage.setItem(key, JSON.stringify([...new Set(arr)])); }
-    function getQuestionId(q) { return q.id || `${q.groupId}_${q.question}`; }
-    function getQuestionById(id) { return allData.find(q => getQuestionId(q) === id); }
-    function showOnly(viewId) {
-        ['login-view', 'setup-view', 'quiz-view', 'review-view', 'result-view', 'wrong-db-view', 'favorite-db-view'].forEach(id => {
-            document.getElementById(id).style.display = (id === viewId) ? 'block' : 'none';
+    showOnly('loading-view');
+    loadQuestions();
+
+    onAuthStateChanged(auth, async (user) => {
+        currentUser = user;
+        stopTimer();
+        examPool = [];
+        userAnswers = {};
+        currentIndex = 0;
+
+        if (!questionsLoaded) {
+            showOnly('loading-view');
+            return;
+        }
+
+        if (user) {
+            await loadOrCreateUserData(user);
+            document.getElementById('login-status').innerText = `登入中: ${user.email}`;
+            document.getElementById('logout-btn').style.display = 'block';
+            showOnly('setup-view');
+        } else {
+            currentUser = null;
+            userData = { wrong_db: [], favorite_db: [] };
+            document.getElementById('login-status').innerText = '';
+            document.getElementById('logout-btn').style.display = 'none';
+            showOnly('login-view');
+        }
+    });
+
+    async function loadQuestions() {
+        try {
+            const res = await fetch('questions.json');
+            if (!res.ok) throw new Error('檔案讀取失敗');
+            const data = await res.json();
+
+            allData = data.map((q, index) => ({
+                ...q,
+                _qid: getQuestionId(q, index)
+            }));
+
+            setupSubjects();
+            setupYears();
+            bindSettingEvents();
+            restoreSettings();
+            questionsLoaded = true;
+
+            if (auth.currentUser) {
+                currentUser = auth.currentUser;
+                await loadOrCreateUserData(auth.currentUser);
+                document.getElementById('login-status').innerText = `登入中: ${auth.currentUser.email}`;
+                document.getElementById('logout-btn').style.display = 'block';
+                showOnly('setup-view');
+            } else {
+                showOnly('login-view');
+            }
+        } catch (err) {
+            console.error('題庫載入失敗:', err);
+            questionsLoaded = false;
+            showOnly('login-view');
+            showLoginError('題庫 questions.json 讀取失敗，請確認檔案是否與 HTML 放在同一層。');
+        }
+    }
+
+    function getQuestionId(q, index = '') {
+        // 題目唯一識別以 groupId 為主。
+        // 錯題、收藏、承上題關聯都會跟同一組題目綁在一起。
+        return q.groupId || q.id || `${q.year || ''}_${q.subject || ''}_${index}_${q.question || ''}`;
+    }
+
+    async function loadOrCreateUserData(user) {
+        if (!user) return;
+
+        const uidRef = doc(db, 'users', user.uid);
+        const uidSnap = await getDoc(uidRef);
+
+        if (uidSnap.exists()) {
+            const data = uidSnap.data();
+            userData = normalizeUserData(data);
+            await updateDoc(uidRef, {
+                email: user.email,
+                lastLogin: serverTimestamp()
+            });
+            return;
+        }
+
+        // 舊版資料自動搬移：從 users/{encodeURIComponent(email)} 搬到 users/{uid}
+        const legacyId = encodeURIComponent(user.email || '');
+        const legacyRef = doc(db, 'users', legacyId);
+        const legacySnap = await getDoc(legacyRef);
+
+        if (legacySnap.exists()) {
+            const legacyData = normalizeUserData(legacySnap.data());
+            userData = legacyData;
+            await setDoc(uidRef, {
+                email: user.email,
+                wrong_db: legacyData.wrong_db,
+                favorite_db: legacyData.favorite_db,
+                migratedFromEmailDoc: legacyId,
+                createdAt: serverTimestamp(),
+                lastLogin: serverTimestamp()
+            });
+            return;
+        }
+
+        userData = { wrong_db: [], favorite_db: [] };
+        await setDoc(uidRef, {
+            email: user.email,
+            wrong_db: [],
+            favorite_db: [],
+            createdAt: serverTimestamp(),
+            lastLogin: serverTimestamp()
         });
     }
 
-    // ========= 測驗邏輯控制 =========
-    function initQuiz(type) {
-        const subject = document.getElementById('subject-filter').value;
-        if (!subject && type === 'normal') return alert('請選擇科目');
-        
-        targetCount = parseInt(document.getElementById('count-filter').value);
-        currentMode = document.getElementById('mode-filter').value;
-        
-        // 篩選題目 (此處簡化處理，僅示範一般流程)
-        examPool = allData.filter(q => q.subject === subject).sort(() => Math.random() - 0.5).slice(0, targetCount);
-        
-        if (type === 'wrong') {
-            const ids = loadArray(wrongDbKey());
-            examPool = ids.map(id => getQuestionById(id)).filter(Boolean);
-        } else if (type === 'favorite') {
-            const ids = loadArray(favoriteDbKey());
-            examPool = ids.map(id => getQuestionById(id)).filter(Boolean);
+    function normalizeUserData(data) {
+        return {
+            wrong_db: Array.isArray(data?.wrong_db) ? data.wrong_db : [],
+            favorite_db: Array.isArray(data?.favorite_db) ? data.favorite_db : []
+        };
+    }
+
+    function getUserRef() {
+        if (!currentUser) return null;
+        return doc(db, 'users', currentUser.uid);
+    }
+
+    window.register = async function() {
+        clearLoginMessages();
+        const email = document.getElementById('email-input').value.trim().toLowerCase();
+        const password = document.getElementById('password-input').value;
+
+        if (!validateEmailPassword(email, password)) return;
+
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            showLoginSuccess('註冊成功，已登入。');
+        } catch (e) {
+            showLoginError(getFirebaseAuthMessage(e));
+        }
+    };
+
+    window.login = async function() {
+        clearLoginMessages();
+        const email = document.getElementById('email-input').value.trim().toLowerCase();
+        const password = document.getElementById('password-input').value;
+
+        if (!validateEmailPassword(email, password)) return;
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            showLoginSuccess('登入成功。');
+        } catch (e) {
+            showLoginError(getFirebaseAuthMessage(e));
+        }
+    };
+
+    window.resetPassword = async function() {
+        clearLoginMessages();
+        const email = document.getElementById('email-input').value.trim().toLowerCase();
+
+        if (!email.includes('@')) {
+            showLoginError('請先輸入正確 Email。');
+            return;
         }
 
-        if (examPool.length === 0) return alert('目前條件下沒有題目。');
-        startQuizState();
+        try {
+            await sendPasswordResetEmail(auth, email);
+            showLoginSuccess('已寄出密碼重設信，請到信箱查看。');
+        } catch (e) {
+            showLoginError(getFirebaseAuthMessage(e));
+        }
+    };
+
+    function validateEmailPassword(email, password) {
+        if (!email.includes('@')) {
+            showLoginError('請輸入正確 Email。');
+            return false;
+        }
+        if (!password || password.length < 6) {
+            showLoginError('密碼至少需要 6 碼。');
+            return false;
+        }
+        return true;
     }
 
-    function startQuizState() {
-        currentIndex = 0; userAnswers = {};
-        showOnly('quiz-view');
-        document.getElementById('timer').style.display = 'block';
-        document.getElementById('mode-badge').innerText = currentMode === 'practice' ? '練習模式' : '模擬考模式';
-        renderQuestion();
+    function showLoginError(message) {
+        const el = document.getElementById('login-error');
+        el.innerText = message;
+        el.style.display = 'block';
     }
+
+    function showLoginSuccess(message) {
+        const el = document.getElementById('login-success');
+        el.innerText = message;
+        el.style.display = 'block';
+    }
+
+    function clearLoginMessages() {
+        document.getElementById('login-error').style.display = 'none';
+        document.getElementById('login-success').style.display = 'none';
+    }
+
+    function getFirebaseAuthMessage(error) {
+        const code = error?.code || '';
+        const map = {
+            'auth/email-already-in-use': '這個 Email 已經註冊，請直接登入。',
+            'auth/invalid-email': 'Email 格式不正確。',
+            'auth/weak-password': '密碼強度不足，至少需要 6 碼。',
+            'auth/user-not-found': '找不到此帳號，請先註冊。',
+            'auth/wrong-password': '密碼錯誤。',
+            'auth/invalid-credential': '帳號或密碼錯誤。',
+            'auth/too-many-requests': '嘗試次數過多，請稍後再試。',
+            'auth/network-request-failed': '網路連線失敗，請檢查網路。',
+            'auth/operation-not-allowed': 'Firebase 尚未啟用 Email/Password 登入，請到 Authentication 設定開啟。'
+        };
+        return map[code] || `操作失敗：${error?.message || code}`;
+    }
+
+    function setupSubjects() {
+        const subjects = [...new Set(allData.map(d => d.subject).filter(Boolean))].sort();
+        const sSelect = document.getElementById('subject-filter');
+        sSelect.innerHTML = '<option value="">-- 選擇科目 --</option>';
+        subjects.forEach(s => sSelect.add(new Option(s, s)));
+    }
+
+    function setupYears() {
+        const years = [...new Set(allData.map(d => d.year).filter(Boolean))].sort().reverse();
+        const box = document.getElementById('year-options');
+        box.innerHTML = '';
+        years.forEach(year => {
+            const label = document.createElement('label');
+            label.className = 'year-chip';
+            label.innerHTML = `<input type="checkbox" class="year-check" value="${escapeHtml(year)}" checked> ${escapeHtml(year)}`;
+            box.appendChild(label);
+        });
+    }
+
+    function bindSettingEvents() {
+        ['subject-filter', 'count-filter', 'mode-filter'].forEach(id => {
+            document.getElementById(id).addEventListener('change', saveSettings);
+        });
+        document.getElementById('year-options').addEventListener('change', saveSettings);
+    }
+
+    function getSelectedYears() {
+        return [...document.querySelectorAll('.year-check:checked')].map(el => el.value);
+    }
+
+    function saveSettings() {
+        const settings = {
+            subject: document.getElementById('subject-filter').value,
+            count: document.getElementById('count-filter').value,
+            mode: document.getElementById('mode-filter').value,
+            years: getSelectedYears()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    }
+
+    function restoreSettings() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        try {
+            const settings = JSON.parse(raw);
+            if (settings.subject) document.getElementById('subject-filter').value = settings.subject;
+            if (settings.count) document.getElementById('count-filter').value = settings.count;
+            if (settings.mode) document.getElementById('mode-filter').value = settings.mode;
+            if (Array.isArray(settings.years)) {
+                document.querySelectorAll('.year-check').forEach(el => {
+                    el.checked = settings.years.includes(el.value);
+                });
+            }
+        } catch (e) {
+            console.warn('設定還原失敗', e);
+        }
+    }
+
+    window.selectAllYears = function(checked) {
+        document.querySelectorAll('.year-check').forEach(el => el.checked = checked);
+        saveSettings();
+    };
+
+    window.initQuiz = function(source) {
+        if (!currentUser) {
+            alert('請先登入。');
+            showOnly('login-view');
+            return;
+        }
+
+        saveSettings();
+        currentSource = source;
+        currentMode = document.getElementById('mode-filter').value;
+        const subject = document.getElementById('subject-filter').value;
+        const selectedYears = getSelectedYears();
+        const limit = parseInt(document.getElementById('count-filter').value, 10);
+
+        let pool = [];
+
+        if (source === 'normal') {
+            if (!subject) return alert('請選擇科目');
+            pool = allData.filter(q => q.subject === subject);
+            if (selectedYears.length > 0) pool = pool.filter(q => selectedYears.includes(q.year));
+        }
+
+        if (source === 'wrong') {
+            const wrongSet = new Set(userData.wrong_db || []);
+            pool = allData.filter(q => wrongSet.has(q._qid));
+            if (subject) pool = pool.filter(q => q.subject === subject);
+            if (selectedYears.length > 0) pool = pool.filter(q => selectedYears.includes(q.year));
+        }
+
+        if (source === 'favorite') {
+            const favSet = new Set(userData.favorite_db || []);
+            pool = allData.filter(q => favSet.has(q._qid));
+            if (subject) pool = pool.filter(q => q.subject === subject);
+            if (selectedYears.length > 0) pool = pool.filter(q => selectedYears.includes(q.year));
+        }
+
+        if (pool.length === 0) return alert('無題目可用，請確認科目、年份或資料庫內容。');
+
+        examPool = shuffleArray(pool).slice(0, Math.min(limit, pool.length));
+        currentIndex = 0;
+        userAnswers = {};
+        showOnly('quiz-view');
+        startTimerIfNeeded();
+        renderQuestion();
+    };
 
     function renderQuestion() {
         const q = examPool[currentIndex];
         if (!q) return;
-        
-        const qid = getQuestionId(q);
-        document.getElementById('favorite-btn').innerText = loadArray(favoriteDbKey()).includes(qid) ? '★ 已收藏' : '☆ 收藏本題';
-        
-        // 圖片渲染
-        const imgArea = document.getElementById('q-image-area');
-        imgArea.innerHTML = q.image ? `<div class="q-image-container"><img src="${q.image}"></div>` : '';
-        
-        document.getElementById('q-content').innerText = q.question;
+
+        const qid = q._qid;
+        const qText = `${q.question || ''}
+
+${q.year ? `年份：${q.year}` : ''}${q.subject ? `　科目：${q.subject}` : ''}${q.groupId ? `　groupId：${q.groupId}` : ''}`;
+        document.getElementById('q-content').innerText = qText;
+        renderImage(q);
+
         const optionsList = document.getElementById('options-list');
         optionsList.innerHTML = '';
-        
-        const answered = userAnswers[currentIndex];
+        const ans = userAnswers[currentIndex];
+
         ['A', 'B', 'C', 'D'].forEach(letter => {
-            const item = document.createElement('div');
-            item.className = 'option-item';
-            const text = q.options[letter];
-            item.innerHTML = `<strong>${letter}.</strong> ${text}`;
-            
-            if (answered && currentMode === 'practice') {
-                if (letter === q.answer) item.classList.add('correct-flash');
-                else if (letter === answered.choice) item.classList.add('wrong-flash');
-            } else if (answered && letter === answered.choice) {
-                item.classList.add('selected-only');
+            const btn = document.createElement('div');
+            btn.className = 'option-item';
+            btn.innerText = `${letter}. ${q.options?.[letter] ?? ''}`;
+
+            if (ans && currentMode === 'practice') {
+                btn.classList.add('locked');
+                if (letter === q.answer) {
+                    btn.classList.add('correct-flash');
+                    btn.innerHTML = `${escapeHtml(letter)}. ${escapeHtml(q.options?.[letter] ?? '')}<span class="feedback-label">正解</span>`;
+                } else if (letter === ans.choice) {
+                    btn.classList.add('wrong-flash');
+                    btn.innerHTML = `${escapeHtml(letter)}. ${escapeHtml(q.options?.[letter] ?? '')}<span class="feedback-label">你的答案</span>`;
+                }
+            } else if (ans && currentMode === 'exam' && letter === ans.choice) {
+                btn.classList.add('selected-only');
             }
 
-            item.onclick = () => {
-                if (answered && currentMode === 'practice') return;
-                userAnswers[currentIndex] = { choice: letter, isCorrect: (letter === q.answer) };
-                if (currentMode === 'practice') updateWrongDatabase(q, letter === q.answer);
+            btn.onclick = () => {
+                if (userAnswers[currentIndex] && currentMode === 'practice') return;
+                userAnswers[currentIndex] = { choice: letter, isCorrect: letter === q.answer };
+                if (currentMode === 'practice') updateWrongDb(qid, letter === q.answer);
                 renderQuestion();
             };
-            optionsList.appendChild(item);
+            optionsList.appendChild(btn);
         });
 
+        const labelMap = { normal: '一般測驗', wrong: '錯題練習', favorite: '收藏題測驗' };
+        const modeMap = { practice: '練習模式', exam: '模擬考模式' };
+        document.getElementById('mode-badge').innerText = `${labelMap[currentSource] || '測驗'}｜${modeMap[currentMode] || ''}`;
         document.getElementById('progress-text').innerText = `${currentIndex + 1} / ${examPool.length}`;
-        const isLast = currentIndex === examPool.length - 1;
-        document.getElementById('next-btn').style.display = isLast ? 'none' : 'block';
-        document.getElementById('final-submit').style.display = isLast ? 'block' : 'none';
-        renderQuestionNav();
+        document.getElementById('prev-btn').disabled = currentIndex === 0;
+        document.getElementById('next-btn').disabled = currentIndex === examPool.length - 1;
+        document.getElementById('final-submit').style.display = (currentIndex === examPool.length - 1 || currentMode === 'exam') ? 'block' : 'none';
+
+        const isFav = userData.favorite_db.includes(qid);
+        document.getElementById('favorite-btn').innerText = isFav ? '★ 已收藏' : '☆ 收藏本題';
+        renderNav();
     }
 
-    function changeQuestion(step) {
-        currentIndex += step;
-        renderQuestion();
+    function renderImage(q) {
+        const area = document.getElementById('q-image-area');
+        area.innerHTML = '';
+
+        const imagePath = getResolvedImagePath(q);
+        if (!imagePath) return;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'q-image-container';
+        const img = document.createElement('img');
+        img.src = imagePath;
+        img.alt = '題目圖片';
+        img.onerror = () => {
+            wrap.innerHTML = `<div class="image-missing-note">圖片載入失敗：${escapeHtml(imagePath)}</div>`;
+        };
+        wrap.appendChild(img);
+        area.appendChild(wrap);
     }
 
-    function updateWrongDatabase(q, isCorrect) {
-        const qid = getQuestionId(q);
-        let wrongIds = loadArray(wrongDbKey());
-        if (isCorrect) wrongIds = wrongIds.filter(id => id !== qid);
-        else wrongIds.push(qid);
-        saveArray(wrongDbKey(), wrongIds);
+    function getResolvedImagePath(q) {
+        if (q.image) return q.image;
+        if (!q.groupId) return '';
+
+        const sameGroupWithImage = allData.find(item => item.groupId === q.groupId && item.image);
+        return sameGroupWithImage?.image || '';
     }
 
-    function finishQuiz() {
-        clearInterval(timerInterval);
-        let score = 0;
-        examPool.forEach((q, i) => {
-            if (userAnswers[i] && userAnswers[i].isCorrect) score++;
-            if (currentMode === 'exam') updateWrongDatabase(q, userAnswers[i] ? userAnswers[i].isCorrect : false);
-        });
-        const finalScore = Math.round((score / examPool.length) * 100);
-        document.getElementById('final-score').innerText = finalScore;
-        showOnly('result-view');
+    async function updateWrongDb(qid, isCorrect) {
+        const ref = getUserRef();
+        if (!ref) return;
+
+        try {
+            if (!isCorrect) {
+                await updateDoc(ref, { wrong_db: arrayUnion(qid), updatedAt: serverTimestamp() });
+                if (!userData.wrong_db.includes(qid)) userData.wrong_db.push(qid);
+            } else {
+                await updateDoc(ref, { wrong_db: arrayRemove(qid), updatedAt: serverTimestamp() });
+                userData.wrong_db = userData.wrong_db.filter(id => id !== qid);
+            }
+        } catch (e) {
+            console.error('錯題庫更新失敗', e);
+            alert('錯題庫更新失敗，請檢查 Firestore Rules。');
+        }
     }
 
-    function backToSetup() { showOnly('setup-view'); }
-    function abortQuizToHome() { if(confirm('確定要放棄本次測驗嗎？')) backToSetup(); }
-
-    // 其餘 UI 輔助功能... (toggleYearDropdown, login, logout, etc. 保持您原本邏輯即可)
-    function toggleYearDropdown() { document.getElementById('year-multi-select').classList.toggle('open'); }
-    function renderYearCheckboxes(years) { /* 您的原代碼邏輯 */ }
-    function login() { /* 您的原代碼邏輯 */ showAppAfterLogin(); }
-    function restoreLogin() { /* 您的原代碼邏輯 */ }
-    function logout() { localStorage.removeItem(LOGIN_KEY); showOnly('login-view'); }
-    function showAppAfterLogin() { showOnly('setup-view'); }
-    function renderQuestionNav() { /* 您的原代碼渲染邏輯 */ }
-    function toggleFavoriteCurrentQuestion() {
+    window.toggleFavoriteCurrentQuestion = async function() {
         const q = examPool[currentIndex];
-        const qid = getQuestionId(q);
-        let favs = loadArray(favoriteDbKey());
-        if(favs.includes(qid)) favs = favs.filter(id => id !== qid);
-        else favs.push(qid);
-        saveArray(favoriteDbKey(), favs);
+        const ref = getUserRef();
+        if (!q || !ref) return;
+
+        const qid = q._qid;
+        const isFav = userData.favorite_db.includes(qid);
+
+        try {
+            if (isFav) {
+                await updateDoc(ref, { favorite_db: arrayRemove(qid), updatedAt: serverTimestamp() });
+                userData.favorite_db = userData.favorite_db.filter(id => id !== qid);
+            } else {
+                await updateDoc(ref, { favorite_db: arrayUnion(qid), updatedAt: serverTimestamp() });
+                userData.favorite_db.push(qid);
+            }
+            renderQuestion();
+        } catch (e) {
+            console.error('收藏更新失敗', e);
+            alert('收藏更新失敗，請檢查 Firestore Rules。');
+        }
+    };
+
+    function renderNav() {
+        const grid = document.getElementById('question-nav-grid');
+        grid.innerHTML = '';
+        examPool.forEach((_, i) => {
+            const b = document.createElement('button');
+            b.className = 'question-nav-btn';
+            if (userAnswers[i]) b.classList.add('answered');
+            if (i === currentIndex) b.classList.add('current');
+            b.innerText = i + 1;
+            b.onclick = () => { currentIndex = i; renderQuestion(); };
+            grid.appendChild(b);
+        });
+    }
+
+    window.changeQuestion = function(step) {
+        currentIndex = Math.max(0, Math.min(examPool.length - 1, currentIndex + step));
         renderQuestion();
+    };
+
+    window.finishQuiz = async function() {
+        if (currentMode === 'exam') {
+            await syncExamWrongDb();
+        }
+
+        let score = 0;
+        examPool.forEach((_, i) => {
+            if (userAnswers[i]?.isCorrect) score++;
+        });
+        document.getElementById('final-score').innerText = Math.round(score / examPool.length * 100);
+        document.getElementById('score-detail').innerText = `答對 ${score} / 總共 ${examPool.length}`;
+        stopTimer();
+        showOnly('result-view');
+    };
+
+    async function syncExamWrongDb() {
+        const ref = getUserRef();
+        if (!ref) return;
+
+        const wrongIds = [];
+        const correctIds = [];
+
+        examPool.forEach((q, i) => {
+            const ans = userAnswers[i];
+            if (!ans || !ans.isCorrect) wrongIds.push(q._qid);
+            if (ans && ans.isCorrect) correctIds.push(q._qid);
+        });
+
+        try {
+            for (const id of wrongIds) {
+                await updateDoc(ref, { wrong_db: arrayUnion(id), updatedAt: serverTimestamp() });
+                if (!userData.wrong_db.includes(id)) userData.wrong_db.push(id);
+            }
+            for (const id of correctIds) {
+                await updateDoc(ref, { wrong_db: arrayRemove(id), updatedAt: serverTimestamp() });
+                userData.wrong_db = userData.wrong_db.filter(x => x !== id);
+            }
+        } catch (e) {
+            console.error('模擬考錯題同步失敗', e);
+            alert('模擬考錯題同步失敗，請檢查 Firestore Rules。');
+        }
+    }
+
+    window.showWrongDatabase = function() {
+        renderDatabaseList('wrong');
+        showOnly('wrong-db-view');
+    };
+
+    window.showFavoriteDatabase = function() {
+        renderDatabaseList('favorite');
+        showOnly('favorite-db-view');
+    };
+
+    function renderDatabaseList(type) {
+        const isWrong = type === 'wrong';
+        const ids = isWrong ? userData.wrong_db : userData.favorite_db;
+        const listId = isWrong ? 'wrong-db-list' : 'favorite-db-list';
+        const className = isWrong ? 'wrong-item' : 'favorite-item';
+        const list = document.getElementById(listId);
+        const idSet = new Set(ids || []);
+        const items = allData.filter(q => idSet.has(q._qid));
+
+        if (items.length === 0) {
+            list.innerHTML = `<div class="empty-state">目前沒有${isWrong ? '錯題' : '收藏題'}。</div>`;
+            return;
+        }
+
+        list.innerHTML = '';
+        items.forEach(q => {
+            const div = document.createElement('div');
+            div.className = className;
+            div.innerHTML = `
+                <div style="font-weight:bold; line-height:1.6;">${escapeHtml(q.question || '')}</div>
+                <div style="color:#7f8c8d; font-size:13px; margin:6px 0;">
+                    ${escapeHtml(q.year || '')}　${escapeHtml(q.subject || '')}　${q.groupId ? `groupId：${escapeHtml(q.groupId)}` : ''}
+                </div>
+                <div style="font-size:14px; line-height:1.6;">
+                    A. ${escapeHtml(q.options?.A || '')}<br>
+                    B. ${escapeHtml(q.options?.B || '')}<br>
+                    C. ${escapeHtml(q.options?.C || '')}<br>
+                    D. ${escapeHtml(q.options?.D || '')}<br>
+                    <strong>答案：${escapeHtml(q.answer || '')}</strong>
+                </div>
+                <div style="margin-top:10px;">
+                    <button class="mini-btn red-btn" data-id="${escapeHtml(q._qid)}" data-action="remove-${type}">移除</button>
+                </div>
+            `;
+            list.appendChild(div);
+        });
+
+        list.querySelectorAll('button[data-action]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.getAttribute('data-id');
+                if (type === 'wrong') await removeWrong(id);
+                if (type === 'favorite') await removeFavorite(id);
+                renderDatabaseList(type);
+            });
+        });
+    }
+
+    async function removeWrong(qid) {
+        const ref = getUserRef();
+        if (!ref) return;
+        await updateDoc(ref, { wrong_db: arrayRemove(qid), updatedAt: serverTimestamp() });
+        userData.wrong_db = userData.wrong_db.filter(id => id !== qid);
+    }
+
+    async function removeFavorite(qid) {
+        const ref = getUserRef();
+        if (!ref) return;
+        await updateDoc(ref, { favorite_db: arrayRemove(qid), updatedAt: serverTimestamp() });
+        userData.favorite_db = userData.favorite_db.filter(id => id !== qid);
+    }
+
+    window.goHome = function() {
+        stopTimer();
+        currentIndex = 0;
+        userAnswers = {};
+        examPool = [];
+        showOnly(currentUser ? 'setup-view' : 'login-view');
+    };
+
+    window.logout = async function() {
+        try {
+            stopTimer();
+            await signOut(auth);
+        } catch (e) {
+            console.error('登出失敗', e);
+            alert('登出失敗，請稍後再試。');
+        }
+    };
+
+    function startTimerIfNeeded() {
+        stopTimer();
+        const timer = document.getElementById('timer');
+        if (currentMode !== 'exam') {
+            timer.style.display = 'none';
+            return;
+        }
+        secondsLeft = 60 * 60;
+        timer.style.display = 'block';
+        updateTimerText();
+        timerInterval = setInterval(() => {
+            secondsLeft--;
+            updateTimerText();
+            if (secondsLeft <= 0) {
+                stopTimer();
+                alert('時間到，系統將自動提交測驗。');
+                window.finishQuiz();
+            }
+        }, 1000);
+    }
+
+    function updateTimerText() {
+        const m = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
+        const s = (secondsLeft % 60).toString().padStart(2, '0');
+        document.getElementById('timer').innerText = `剩餘時間 ${m}:${s}`;
+    }
+
+    function stopTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = null;
+        document.getElementById('timer').style.display = 'none';
+    }
+
+    function showOnly(id) {
+        ['loading-view', 'login-view', 'setup-view', 'quiz-view', 'result-view', 'wrong-db-view', 'favorite-db-view'].forEach(v => {
+            const el = document.getElementById(v);
+            if (el) el.style.display = (v === id) ? 'block' : 'none';
+        });
+    }
+
+    function shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+    }
+
+    function escapeHtml(value) {
+        return String(value)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
     }
 </script>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBo94FGt2kzQsEpYvnEjkbrmo85fzNO0UQ",
-    authDomain: "myquiz-443fc.firebaseapp.com",
-    projectId: "myquiz-443fc",
-    storageBucket: "myquiz-443fc.firebasestorage.app",
-    messagingSenderId: "821958673153",
-    appId: "1:821958673153:web:fc11869a6b1256036f5100"
-  };
-
-  // 初始化 Firebase
-  const app = initializeApp(firebaseConfig);
-  console.log("Firebase 核心已載入成功");
-</script>
-
 </body>
 </html>
