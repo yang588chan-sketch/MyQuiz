@@ -102,7 +102,7 @@
     <div id="login-view" class="filter-section login-card">
         <h3>會員登入 / 註冊</h3>
         <p style="color:#7f8c8d; font-size:14px; line-height:1.6;">
-            不同裝置使用同一組 Email 與密碼登入後，會讀取同一份題庫
+            不同裝置使用同一組 Email 與密碼登入後，會讀取同一份題庫。
         </p>
         <input id="email-input" type="email" class="full-width" autocomplete="email" placeholder="Email，例如 test@example.com">
         <input id="password-input" type="password" class="full-width" autocomplete="current-password" placeholder="密碼，至少 6 碼">
@@ -112,7 +112,7 @@
         <div id="login-error" class="danger-note" style="display:none"></div>
         <div id="login-success" class="success-note" style="display:none"></div>
         <div class="notice">
-            注意：註冊完即可登入
+            注意： 本系統不會儲存任何個人資訊，註冊完即可登入
         </div>
     </div>
 
@@ -123,6 +123,11 @@
         </div>
 
         <div style="margin-bottom: 15px;">
+            <select id="source-filter">
+                <option value="pastExam">考古題</option>
+                <option value="questionBank">題庫</option>
+                <option value="all">全部</option>
+            </select>
             <select id="subject-filter"><option value="">-- 選擇科目 --</option></select>
             <select id="count-filter">
                 <option value="40">40 題</option>
@@ -145,7 +150,7 @@
         </div>
 
         <div class="notice">
-            年份可複選。若沒有勾選年份，系統會視為使用該科目的全部年份。
+            年份可複選。若沒有勾選年份，視為使用該科目的全部年份。
         </div>
 
         <button onclick="initQuiz('normal')">開始隨機測驗</button>
@@ -241,6 +246,14 @@
     let secondsLeft = 0;
     let questionsLoaded = false;
 
+    const PAST_EXAM_SUBJECTS = [
+        '貨物作業',
+        '船舶通訊與航海英文',
+        '航海學',
+        '航行安全與氣象',
+        '船舶操作與船上人員管理'
+    ];
+
     const STORAGE_KEY = 'quiz_last_settings_v2';
 
     showOnly('loading-view');
@@ -274,11 +287,15 @@
             if (!res.ok) throw new Error('檔案讀取失敗');
             const data = await res.json();
 
-            allData = data.map((q, index) => ({
-                ...q,
-                _index: index,
-                _qid: getQuestionId(q, index)
-            }));
+            allData = data.map((q, index) => {
+                const item = {
+                    ...q,
+                    _index: index,
+                    _sourceType: getSourceTypeBySubject(q.subject)
+                };
+                item._qid = getQuestionId(item, index);
+                return item;
+            });
 
             setupSubjects();
             setupYears();
@@ -299,10 +316,23 @@
         }
     }
 
+    function getSourceTypeBySubject(subject) {
+        return PAST_EXAM_SUBJECTS.includes(subject) ? 'pastExam' : 'questionBank';
+    }
+
+    function getSourceTypeLabel(sourceType) {
+        if (sourceType === 'pastExam') return '考古題';
+        if (sourceType === 'questionBank') return '題庫';
+        return '全部';
+    }
+
     function getQuestionId(q, index = '') {
-        // 題目唯一識別以 groupId 為主。
-        // 錯題、收藏、承上題關聯都會跟同一組題目綁在一起。
-        return q.groupId || q.id || `${q.year || ''}_${q.subject || ''}_${index}_${q.question || ''}`;
+        // 題目唯一識別以 sourceType + groupId 為主。
+        // 不更動 JSON，而是在程式內用 subject 判斷 _sourceType。
+        // 這樣考古題與題庫即使 groupId 相同，也不會混在同一筆錯題/收藏/出題紀錄。
+        const sourceType = q._sourceType || getSourceTypeBySubject(q.subject);
+        const baseId = q.groupId || q.id || `${q.year || ''}_${q.subject || ''}_${index}_${q.question || ''}`;
+        return `${sourceType}:${baseId}`;
     }
 
     async function enterMainView(user) {
@@ -483,10 +513,22 @@
     }
 
     function setupSubjects() {
-        const subjects = [...new Set(allData.map(d => d.subject).filter(Boolean))].sort();
+        const source = document.getElementById('source-filter')?.value || 'pastExam';
+        const subjects = [...new Set(
+            allData
+                .filter(d => source === 'all' || d._sourceType === source)
+                .map(d => d.subject)
+                .filter(Boolean)
+        )].sort();
+
         const sSelect = document.getElementById('subject-filter');
+        const previousSubject = sSelect.value;
         sSelect.innerHTML = '<option value="">-- 選擇科目 --</option>';
         subjects.forEach(s => sSelect.add(new Option(s, s)));
+
+        if (subjects.includes(previousSubject)) {
+            sSelect.value = previousSubject;
+        }
     }
 
     function setupYears() {
@@ -502,8 +544,11 @@
     }
 
     function bindSettingEvents() {
-        ['subject-filter', 'count-filter', 'mode-filter'].forEach(id => {
-            document.getElementById(id).addEventListener('change', saveSettings);
+        ['source-filter', 'subject-filter', 'count-filter', 'mode-filter'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                if (id === 'source-filter') setupSubjects();
+                saveSettings();
+            });
         });
         document.getElementById('year-options').addEventListener('change', saveSettings);
     }
@@ -514,6 +559,7 @@
 
     function saveSettings() {
         const settings = {
+            source: document.getElementById('source-filter').value,
             subject: document.getElementById('subject-filter').value,
             count: document.getElementById('count-filter').value,
             mode: document.getElementById('mode-filter').value,
@@ -527,6 +573,8 @@
         if (!raw) return;
         try {
             const settings = JSON.parse(raw);
+            if (settings.source) document.getElementById('source-filter').value = settings.source;
+            setupSubjects();
             if (settings.subject) document.getElementById('subject-filter').value = settings.subject;
             if (settings.count) document.getElementById('count-filter').value = settings.count;
             if (settings.mode) document.getElementById('mode-filter').value = settings.mode;
@@ -555,6 +603,7 @@
         saveSettings();
         currentSource = source;
         currentMode = document.getElementById('mode-filter').value;
+        const sourceType = document.getElementById('source-filter').value;
         const subject = document.getElementById('subject-filter').value;
         const selectedYears = getSelectedYears();
         const limit = parseInt(document.getElementById('count-filter').value, 10);
@@ -564,15 +613,16 @@
         if (source === 'normal') {
             if (!subject) return alert('請選擇科目');
             pool = allData.filter(q => q.subject === subject);
+            if (sourceType !== 'all') pool = pool.filter(q => q._sourceType === sourceType);
             if (selectedYears.length > 0) pool = pool.filter(q => selectedYears.includes(q.year));
         }
 
         if (source === 'wrong') {
-            pool = buildSavedQuestionPool(userData.wrong_db || [], subject, selectedYears, '錯題');
+            pool = buildSavedQuestionPool(userData.wrong_db || [], sourceType, subject, selectedYears, '錯題');
         }
 
         if (source === 'favorite') {
-            pool = buildSavedQuestionPool(userData.favorite_db || [], subject, selectedYears, '收藏題');
+            pool = buildSavedQuestionPool(userData.favorite_db || [], sourceType, subject, selectedYears, '收藏題');
         }
 
         if (pool.length === 0) return alert('無題目可用，請確認科目、年份或資料庫內容。');
@@ -586,7 +636,7 @@
         renderQuestion();
     };
 
-    function buildSavedQuestionPool(savedIds, subject, selectedYears, label) {
+    function buildSavedQuestionPool(savedIds, sourceType, subject, selectedYears, label) {
         const savedSet = new Set(savedIds || []);
 
         // 兼容舊版與新版資料：
@@ -596,6 +646,7 @@
         if (basePool.length === 0) return [];
 
         let filteredPool = basePool;
+        if (sourceType !== 'all') filteredPool = filteredPool.filter(q => q._sourceType === sourceType);
         if (subject) filteredPool = filteredPool.filter(q => q.subject === subject);
         if (selectedYears.length > 0) filteredPool = filteredPool.filter(q => selectedYears.includes(q.year));
 
@@ -614,6 +665,9 @@
 
         const candidates = [
             q._qid,
+            q.groupId,
+            q.id,
+            q.groupId ? `${q._sourceType || getSourceTypeBySubject(q.subject)}:${q.groupId}` : '',
             q.groupId,
             q.id,
             q.question ? `${q.groupId || q.id || ''}_${q.question}` : ''
@@ -677,6 +731,7 @@
 
     function buildQuestionMeta(q) {
         const meta = [];
+        if (q._sourceType) meta.push(`來源：${getSourceTypeLabel(q._sourceType)}`);
         if (q.year) meta.push(`年份：${q.year}`);
         if (q.subject) meta.push(`科目：${q.subject}`);
         if (q.groupId) meta.push(`groupId：${q.groupId}`);
@@ -986,7 +1041,7 @@
     }
 
     function getSeenGroupId(q) {
-        return q.groupId || q._qid;
+        return q._qid || getQuestionId(q, q._index || '');
     }
 
     async function markSeenGroups(questions) {
